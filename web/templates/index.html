@@ -1,222 +1,17 @@
-<!DOCTYPE HTML>
-
 <html>
-<header>
-
-  <section id="gallery">
-    <button id="test1">
-    <div class="primary">
-      Changlelogs :)
-    </div>
-    </button>
-    <button id="test2">
-    <div class="primary">
-      Login
-    </div>
-    </button>
-    <button id="test3">
-    <div class="primary">
-      Signup
-    </div>
-    </button>
-  </section>
-</header>
-<head>
-
-<!-- Trigger/Open The Modal -->
-<div align=center>
-</div>
-<!-- The Modal -->
-<div id="myModal" class="modal">
-
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
-
-
-
-
-	<title>A.C.E.</title>
-	<script>
-var roblox = document.getElementById("test1");
-
-roblox.onclick = function(){window.location.replace("https://friedsquid.pythonanywhere.com/changelog");}
-
-var modal = document.getElementById("myModal");
-
-var btn = document.getElementById("test2");
-
-var span = document.getElementsByClassName("close")[0];
-
-btn.onclick = function() {
-  modal.style.display = "block";
-}
-
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-	</script>
-    <style>
-
-    #gallery{
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-gap: 12px;
-        margin: 12px 1.75vh;
-        height: 96.5vh;
-        font-size: 150%;
-    }
-    body{background-color: #2b2b2b;}
-    button
-    {
-        background-color: #2b2b2b;
-        color: #9e9e9e;
-        border: none;
-        cursor: pointer;
-        border-radius: 8px;
-        z-index: 1;
-    }
-    button:hover {
-        opacity: 0.7;
-        background-color: #3f3f3f;
-    }
-    .modalbutton{
-        background-color: #2b2b2b;
-        color: white;
-        padding: 14px 20px;
-        margin: 8px 0;
-        border: none;
-        cursor: pointer;
-        width: 60%;
-        border-radius: 8px;
-        z-index: 3;
-      }
-
-      input{
-        width: 60%;
-        border-style: hidden hidden solid hidden;
-      }
-      /* The Modal (background) */
-    .modal {
-      display: none; /* Hidden by default */
-      position: fixed; /* Stay in place */
-      z-index: 1; /* Sit on top */
-      left: 0;
-      top: 0;
-      width: 100%; /* Full width */
-      height: 100%; /* Full height */
-      overflow: auto; /* Enable scroll if needed */
-      background-color: rgb(0,0,0); /* Fallback color */
-      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    }
-
-    /* Modal Content/Box */
-    .modal-content {
-      background-color: #fefefe;
-      margin: 15% auto; /* 15% from the top and centered */
-      padding: 20px;
-      border: 1px solid #888;
-      width: 40%; /* Could be more or less, depending on screen size */
-      border-radius: 3px;
-    }
-
-    /* The Close Button */
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-    }
-
-    .close:hover,
-    .close:focus {
-      color: black;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .modal2 {
-      display: none; /* Hidden by default */
-      position: fixed; /* Stay in place */
-      z-index: 1; /* Sit on top */
-      left: 0;
-      top: 0;
-      width: 100%; /* Full width */
-      height: 100%; /* Full height */
-      overflow: auto; /* Enable scroll if needed */
-      background-color: rgb(0,0,0); /* Fallback color */
-      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    }
-
-    /* Modal Content/Box */
-    .modal-content2 {
-      background-color: #fefefe;
-      margin: 15% auto; /* 15% from the top and centered */
-      padding: 20px;
-      border: 1px solid #888;
-      width: 40%; /* Could be more or less, depending on screen size */
-      border-radius: 3px;
-    }
-
-    /* The Close Button */
-    .close2 {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-    }
-
-    .close2:hover,
-    .close2:focus {
-      color: black;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    </style>
-
-    <br>
-
-    <div class=centre align = center>
-    <form action="verif-page" method="POST" id="form_login">
+  <body>
+    <form action="verif-page" method="POST"     id="form_login">
       <div class = "loginstuff" id="lol">
         <p>   </p><input type="text" placeholder="Enter Username (must be alphanumeric)" name="uname" pattern="([A-z0-9À-ž\s]).{1,}" required>
         <br><br><br>
         <input type="password" placeholder="Enter Password (must be alphanumeric)" name="psw" pattern="([A-z0-9À-ž\s]).{1,}" required>
         <br><br><br>
       </div>
-      <div class="sumbit" align="center">
-        <button type="submit" class="modalbutton">Login</button>
+      <div class="submit" align="center">
+        <button type="submit">Login</button>
       </div>
     </form>
-    </div>
 
-
-
-
-
-
-
-
-	</body>
-	</div>
-	</div>
-
-<!-- The Modal -->
-<div id="myModal2" class="modal2">
-
-  <!-- Modal content -->
-
-  <div class="modal-content2">
-    <span class="close2">&times;</span>
-    <br>
-    <div class=centre align = center>
     <form action="registerpage" method="POST">
       <div class = "loginstuff" id="lol">
         <p>   </p><p>   </p><input type="text" placeholder="Enter Username (must be alphanumeric)" name="uname" pattern="([A-z0-9À-ž\s]).{1,}" required>
@@ -225,32 +20,8 @@ window.onclick = function(event) {
         <br><br><br>
       </div>
       <div class="sumbit" align="center">
-        <button type="submit" class="modalbutton">Register</button>
+        <button type="submit">Register</button>
       </div>
     </form>
-    </div>
-
-
-<script>
-var modal2 = document.getElementById("myModal2");
-
-var btn2 = document.getElementById("test3");
-
-var span2 = document.getElementsByClassName("close2")[0];
-
-btn2.onclick = function() {
-  modal2.style.display = "block";
-}
-
-span2.onclick = function() {
-  modal2.style.display = "none";
-}
-
-window.onclick = function(event) {
-  if (event.target == modal2) {
-    modal2.style.display = "none";
-  }
-}
-</script>
-
+  </body>
 </html>
