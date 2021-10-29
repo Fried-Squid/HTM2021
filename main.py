@@ -7,7 +7,7 @@
 # Lucy   - data aquisition
 
 ##CODE
-print("running")
+#print("running")
 import cv2
 import pytesseract
 from pytesseract import Output
@@ -17,6 +17,7 @@ pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tessera
 global currentlyProcessing
 stack = [] #but its an array
 
+from PIL import Image
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input
 from tensorflow.keras.layers import Conv2D
@@ -60,7 +61,7 @@ def mp4toframes(video):
     if count == 64:
       break
     success,image = vidcap.read()
-    print('Read a new frame: ', success)
+    #print('Read a new frame: ', success)
     count += 1
   #os.remove(video)
   stack.append(folder)
@@ -77,17 +78,6 @@ def drawBox(outputFile, img):
 
   cv2.imwrite(outputFile, img)
   cv2.waitKey(0)
-
-#process next folder in the stack
-def train():
-  IMG_SHAPE = (640, 352, 3)
-  BATCH_SIZE = 64
-  EPOCHS = 2
-  BASE_OUTPUT = "output"
-  MODEL_PATH = os.path.sep.join([BASE_OUTPUT, "siamese_model"])
-  PLOT_PATH = os.path.sep.join([BASE_OUTPUT, "plot.png"])
-
-  data = make_pairs()
 
 def euclidean_distance(v):
 	(a,b)=v
@@ -126,7 +116,7 @@ def make_pairs():
     if filename.endswith(".mp4"):
       classes.append(filename.split(".mp4")[0])
   numClasses = len(classes)
-  print(classes)
+  #print(classes)
   # For each unique label, we compute idxs, which is a list of all indexes that belong to the current class labe
   idx=[]
   idLabels=classes
@@ -136,20 +126,20 @@ def make_pairs():
       for filename in os.listdir("test vids/"+classes[numClasses-1]):
         if filename.endswith(".jpg"):
           count+=1
-      print(count)
+      #print(count)
       idx.append(list(range(sum(counts)-1, sum(counts)+count-1)))
       counts.append(count)
 
   images=[]
-  for filename1 in os.listdir("test vids"): 
+  for filename1 in os.listdir("test vids"):
     if filename1.endswith(".mp4"):
       for filename in os.listdir("test vids/"+filename1.split(".")[0]):
         if filename.endswith(".jpg"):
           label = filename1.split(".mp4")[0]
           images.append("test vids/"+label+"/"+filename)
-    
-  
-  for filename1 in os.listdir("test vids"): 
+
+
+  for filename1 in os.listdir("test vids"):
     if filename1.endswith(".mp4"):
       for filename in os.listdir("test vids/"+filename1.split(".")[0]):
         if filename.endswith(".jpg"):
@@ -159,24 +149,25 @@ def make_pairs():
           idxIndex = idLabels.index(label)
           randomSame = images[np.random.choice(idx[idxIndex])]
 
-          pairImages.append([image, randomSame])
+          #print(np.asarray(Image.open(image)).shape)
+
+          pairImages.append([np.asarray(Image.open(image)), np.asarray(Image.open(randomSame))])
           pairLabels.append([1])
 
-          labelChosen = label 
+          labelChosen = label
           while labelChosen == label:
             labelChosen = np.random.choice(classes) #lol a really bad way to do this
           label = labelChosen
           idxIndex = idLabels.index(label)
           randomDiff = images[np.random.choice(idx[idxIndex])]
 
-          pairImages.append([image, randomDiff])
+          pairImages.append([np.asarray(Image.open(image)), np.asarray(Image.open(randomDiff))])
           pairLabels.append([0])
 
 
   return (np.array(pairImages), np.array(pairLabels))
 
-def plot_training(H, plotPath):
-	# construct a plot that plots and saves the training history
+def plot_training(H, plotPath): #'edit this'
 	plt.style.use("ggplot")
 	plt.figure()
 	plt.plot(H.history["loss"], label="train_loss")
@@ -188,5 +179,5 @@ def plot_training(H, plotPath):
 	plt.ylabel("Loss/Accuracy")
 	plt.legend(loc="lower left")
 	plt.savefig(plotPath)
-#genFrames()
+genFrames()
 #train()
