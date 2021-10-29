@@ -1,27 +1,45 @@
 <html>
-  <body>
-    <form action="verif-page" method="POST"     id="form_login">
-      <div class = "loginstuff" id="lol">
-        <p>   </p><input type="text" placeholder="Enter Username (must be alphanumeric)" name="uname" pattern="([A-z0-9À-ž\s]).{1,}" required>
-        <br><br><br>
-        <input type="password" placeholder="Enter Password (must be alphanumeric)" name="psw" pattern="([A-z0-9À-ž\s]).{1,}" required>
-        <br><br><br>
-      </div>
-      <div class="submit" align="center">
-        <button type="submit">Login</button>
-      </div>
-    </form>
+  <head>
+    <style>
+      body {
+            background-image: url('https://i.imgur.com/9m7hilt.jpg')
+            }
+      .buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            top: 30%;
+            }
+      .buttons input {
+            background-size: 189px 189px;
+            height: 375px;
+            width: 189px;
+            background-color: transparent;
+            background-repeat: no-repeat;
+            border: 0;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+            }
 
-    <form action="registerpage" method="POST">
-      <div class = "loginstuff" id="lol">
-        <p>   </p><p>   </p><input type="text" placeholder="Enter Username (must be alphanumeric)" name="uname" pattern="([A-z0-9À-ž\s]).{1,}" required>
-        <br><br><br>
-        <input type="password" placeholder="Enter Password (must be alphanumeric)" name="psw" pattern="([A-z0-9À-ž\s]).{1,}" required>
-        <br><br><br>
-      </div>
-      <div class="sumbit" align="center">
-        <button type="submit">Register</button>
-      </div>
-    </form>
+      #pawn {
+            background-image: url('https://imgur.com/QleVlMk.jpg');
+            }
+      #queen {
+            background-image: url('https://imgur.com/RYuk6FY.jpg');
+            }
+    </style>
+  </head>
+
+  <body>
+    <div class="buttons">
+      <form action="login.html">
+       <input type="submit" value="Login"id="queen">
+      </form>
+      <form action="register.html">
+        <input type="submit" value="Register"id="pawn">
+      </form>
+    </div>
   </body>
 </html>

@@ -58,7 +58,7 @@ def mp4toframes(video):
   while success:
     image=canny(get_grayscale(remove_noise(image)))
     cv2.imwrite("%s/frame%s.jpg" % (folder,str(count)), image)     # save frame as JPEG file
-    if count == 64:
+    if count == 200: #no more than 200 frames
       break
     success,image = vidcap.read()
     #print('Read a new frame: ', success)
@@ -108,7 +108,7 @@ def build_siamese_model(inputShape, embeddingDim=48):
     # return the model to the calling function
     return model
 
-def make_pairs():
+def make_pairs(): #TODO: ADD TRANSFORMS AND CONTROLS, BUT FIRST I WANNA TEST
   pairLabels = []
   pairImages = []
   classes = []
@@ -179,5 +179,26 @@ def plot_training(H, plotPath): #'edit this'
 	plt.ylabel("Loss/Accuracy")
 	plt.legend(loc="lower left")
 	plt.savefig(plotPath)
+
+
+def plot_predict(model, test_data, BASE_OUTPUT):
+    predictions = model.predict(test_data)
+    fig2 = plt.figure(figsize=(10,10))
+    for b in range(100,164):
+        plt.subplot(8,8,(b-100)+1)
+        plt.xticks([])
+        plt.yticks([])
+        plt.grid(False)
+        im1 = Image.fromarray(np.uint8(cm.gist_earth(test_data[b][0])*255))
+        im2 = Image.fromarray(np.uint8(cm.gist_earth(test_data[b][1])*255))
+        concat_im = Image.new('RGB', (im1.width + im2.width, im1.height))
+        concat_im.paste(im1, (0, 0))
+        concat_im.paste(im2, (im1.width, 0))
+
+        plt.imshow(concat_im, cmap=plt.cm.binary)
+        plt.xlabel(class_names[np.argmax(predictions[b])])
+
+        fig2.savefig('output/prediction.png')
+        
 genFrames()
 #train()

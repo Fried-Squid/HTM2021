@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <style>
+      body {
+            background-image: url('https://i.imgur.com/9m7hilt.jpg');
+            }
+      #form_login {
+            position: relative;
+            top: 40%;
+            align: center;
+      }
+      .fields input {
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: white;
+            background-image: url('https://imgur.com/TILqkIC.jpg');
+            background-position: 5px 5px; 
+            background-repeat: no-repeat;
+            padding: 12px 20px 12px 40px;
+            width: 400px;
+            }
+    </style>
+  </head>
+
+  <body>
+
+    <form action="verif-page" method="POST"     id="form_login">
+      <div class = "fields" align="center">
+        <input type="text" placeholder="Enter Username (must be alphanumeric)" name="uname" pattern="([A-z0-9À-ž\s]).{1,}" required class="field">
+        <br> <br>
+        <input type="password" placeholder="Enter Password (must be alphanumeric)" name="psw" pattern="([A-z0-9À-ž\s]).{1,}" required class="field">
+      </div>
+      <br>
+      <div class="submit" align="center">
+        <button type="submit">Login</button>
+      </div>
+    </form>
+    
+  </body>
+</html>

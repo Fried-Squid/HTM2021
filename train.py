@@ -12,12 +12,17 @@ import colorama
 colorama.init()
 
 #constants
-#physical_devices = tf.config.list_physical_devices('GPU')
-#tf.config.experimental.set_memory_growth(physical_devices[0], False)
-
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+try:
+    physical_devices = tf.config.list_physical_devices('GPU')
+    print(physical_devices)
+    tf.config.experimental.set_memory_growth(physical_devices[0], True)
+    tf.config.experimental.set_virtual_device_configuration(physical_devices[0], [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=4096)])
+except:
+    pass
 SHAPE = (640, 352, 1)
-BATCH_SIZE = 1
-EPOCHS = 100
+BATCH_SIZE = 15
+EPOCHS = 10
 BASE_OUTPUT = "output"
 MODEL_PATH = os.path.sep.join([BASE_OUTPUT, "siamese_model"])
 PLOT_PATH = os.path.sep.join([BASE_OUTPUT, "plot.png"])
@@ -56,3 +61,5 @@ model.save(MODEL_PATH)
 #plot the data
 print(colorama.Fore.GREEN + "[INFO] plotting training data"+ colorama.Fore.RESET)
 main.plot_training(history, PLOT_PATH)
+(images, labels) = main.make_pairs()
+main.plot_training(model, images, "lol")
