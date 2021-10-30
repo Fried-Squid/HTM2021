@@ -97,13 +97,44 @@ def uploadIMG():
   if request.method == 'POST':
     try:
       img = Image.open(request.files["img"])
-      cv2.imwrite("img.png", np.asarray(img))
+        from tensorflow.keras.models import Model
+        from tensorflow.keras.layers import Dense
+        from tensorflow.keras.layers import Input
+        from tensorflow.keras.layers import Lambda
+        from tensorflow.keras.datasets import mnist
+        import tensorflow as tf
+        import os
+        import numpy as np
+        import sys
+
+        model = tf.keras.models.load_model('output/siamese_model') #needs the "output" folder from colab in /web/
+        classLabels = ["labels of classes list"] #this needs to be working
+        classes = ["list of control images from test vids/drink as a file location"]
+        x=[]
+        for each in classes:
+          x.append(model.predict([np.assaray(Image.open(each)), preprocess(img)], batch_size=15)[0][0])
+        y=max(x)
+
+        return "can = " + classLabels.index[y]
       #indetify the can here! it sus! sus can! report it vented >:((
     except Exception as e:
       print(e)
-    return redirect(web_url, code=302)
-    
+    return redirect(web_url+"/homepage", code=302)
+#greyscale
+def get_grayscale(image):
+    return cv2.cvtColor(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY), cv2.COLOR_GRAY2BGR)
 
+# noise removal
+def remove_noise(image):
+    return cv2.medianBlur(image,5)
+
+#canny edge detection
+def canny(image):
+  
+  return cv2.Canny(image, 100, 200)
+def preprocess(x):
+  import numpy as np
+  return np.assaray(canny(get_grayscale(x)))
 def main():
   db.init()
   app.run(host='0.0.0.0', port=8080)

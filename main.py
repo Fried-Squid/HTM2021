@@ -18,8 +18,7 @@ from PIL import Image
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input
 from tensorflow.keras.layers import Conv2D
-from tensorflow.keras.layers import Dense
-from tensorflow.keras.layers import Dropout
+from tensorflow.keras.layers import Dense, Dropout
 from tensorflow.keras.layers import GlobalAveragePooling2D
 from tensorflow.keras.layers import MaxPooling2D
 import tensorflow.keras.backend as K
@@ -39,7 +38,7 @@ def canny(image):
     return cv2.Canny(image, 100, 200)
 
 #get frames from an mp4 and turn it into a folder of jpegs
-def mp4toframes(video):
+def mp4toframes(video, copyNum):
   global currentlyProcessing
   count=""
   while True:
@@ -49,12 +48,16 @@ def mp4toframes(video):
     except Exception as e:
       return None
   folder = video.split(".")[0] + str(count)
+  print(folder)
   vidcap = cv2.VideoCapture(video)
   success,image = vidcap.read()
   count = 0
   while success:
     image=canny(get_grayscale(remove_noise(image)))
-    cv2.imwrite("%s/frame%s.jpg" % (folder,str(count)), image)     # save frame as JPEG file
+    if copyNum == 0:
+      cv2.imwrite("%s/frame%s.jpg" % (folder,str(count)), image)     # save frame as JPEG file
+    else:
+      cv2.imwrite("%s/CopyNo%s-frame%s.jpg" % (folder,str(copyNum),str(count)), image) 
     if count == 200: #no more than 200 frames
       break
     success,image = vidcap.read()
@@ -71,12 +74,19 @@ def euclidean_distance(v):
 	return K.sqrt(K.maximum(K.sum(K.square(a-b), axis=1,keepdims=True), K.epsilon()))
 
 def genFrames():
+  classes2=[]
   for filename in os.listdir("test vids"):
     if filename.endswith(".mp4"):
       try:
-        mp4toframes("test vids/"+filename)
-      except:
-        pass
+        
+        if "COPY" in str(filename): #fix this one day
+          pass
+        else:
+          mp4toframes("test vids/"+filename,classes2.count(filename))
+          classes2.append(filename)
+        #print(classes2)        
+      except Exception as e:
+        print(e)
 
 def build_siamese_model(inputShape, embeddingDim=48):
     # specify the inputs for the feature extractor network
@@ -125,9 +135,9 @@ def make_pairs(): #TODO: ADD TRANSFORMS AND CONTROLS, BUT FIRST I WANNA TEST
           image = "test vids/"+label+"/"+filename
 
           #idx generates wrong?????????????? ?? ???? ??? ?? !! ke4?! nf0!! sussy 
-          randomSame = np.random.choice(foo[label])
+          #replaced with foo
 
-          #print(np.asarray(Image.open(image)).shape)
+          randomSame = np.random.choice(foo[label])
 
           pairImages.append([np.asarray(Image.open(image)), np.asarray(Image.open(randomSame))])
           pairLabels.append([1])
@@ -138,10 +148,11 @@ def make_pairs(): #TODO: ADD TRANSFORMS AND CONTROLS, BUT FIRST I WANNA TEST
           label = labelChosen
           randomDiff = np.random.choice(foo[label])
 
-
+ 
           pairImages.append([np.asarray(Image.open(image)), np.asarray(Image.open(randomDiff))])
           pairLabels.append([0])
 
+  #print(np.array(pairImages)) error is not here ( i hope)
   return (np.array(pairImages), np.array(pairLabels))
 
 
@@ -198,4 +209,4 @@ def plot_predict(model, test_data, BASE_OUTPUT):
         
         fig2.savefig('output/prediction.png')
         
-#genFrames()
+genFrames()

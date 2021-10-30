@@ -1,9 +1,31 @@
 <html>
   <head>
     <style>
-      body {background-color: green}
+      body {background-color: var(--background-color)}
+      .slidecontainer {
+        width: 100%; 
+      }
+      :root {
+        --background-color: rgb(0, 150, 0)
+      }
     </style>
+    
   </head>
-  <body>
+  <body id='yeet'>
+    <div class="slidecontainer">
+      <input type="range" min="1" max="255" value="150" class="slider" id="myRange">
+    </div>
+  
+  <script>
+      var slider = document.getElementById("myRange");
+      var yeet = document.getElementById('yeet');
+      
+      slider.oninput = function() {
+        var colour = (255, slider.value, 255);
+        yeet.style.backgroundColor = 'rgb(' + [0,slider.value,0].join(',') + ')';
+
+      }
+      
+    </script>
   </body>
 </html>
