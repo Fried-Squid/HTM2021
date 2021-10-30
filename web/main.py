@@ -4,6 +4,9 @@ import os
 import hashlib
 import loginData as db
 import sessions
+import numpy as np
+from PIL import Image
+import cv2
 
 app = Flask(__name__)
 global web_url
@@ -20,7 +23,23 @@ def nametaken():
  return render_template("nametaken.html")
 @app.route('/homepage')
 def homepage():
- return render_template("homepage.html")
+ return render_template("homepage.html", username = sessions.decode(request.cookies.get('usr')))
+@app.route("/greenday")
+def greenday():
+  return render_template("greenday.html")
+@app.route("/login")
+def login():
+  return render_template("login.html")
+@app.route("/register")
+def register():
+  return render_template("register.html")
+  
+@app.route("/upload")
+def upload():
+  return render_template("upload.html")
+@app.route("/collection")
+def collection():
+  return render_template("collection.html")
 
 @app.route('/registerpage', methods=["POST"])
 def verif_R():
@@ -62,7 +81,7 @@ def verif():
     if loginp == a[1][32:]:
       resp = make_response(redirect(web_url + "/homepage"))
       resp.set_cookie("usr", loginn)
-      resp.set_cookie("session_identifier", sessions.newsession(a[0],"b"))
+      resp.set_cookie("session_identifier", sessions.newsession(a[0]))
       return resp
     else:
       return redirect(
@@ -70,6 +89,20 @@ def verif():
   else:
     return redirect(web_url, code=302)
 
+@app.route('/uploadIMG', methods=["POST"])
+def uploadIMG():
+  print(request.files.keys())
+  for each in request.files.values():
+    print(each)
+  if request.method == 'POST':
+    try:
+      img = Image.open(request.files["img"])
+      cv2.imwrite("img.png", np.asarray(img))
+      #indetify the can here! it sus! sus can! report it vented >:((
+    except Exception as e:
+      print(e)
+    return redirect(web_url, code=302)
+    
 
 def main():
   db.init()

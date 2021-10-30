@@ -1,2 +1,2 @@
 language = "python"
-run = "python train.py"
+run = "python web/main.py"

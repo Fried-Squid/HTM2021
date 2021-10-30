@@ -9,11 +9,8 @@
 ##CODE
 #print("running")
 import cv2
-import pytesseract
-from pytesseract import Output
 import os
 import numpy as np
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 global currentlyProcessing
 stack = [] #but its an array
 
@@ -67,17 +64,7 @@ def mp4toframes(video):
   stack.append(folder)
 
 def drawBox(outputFile, img):
-  try:
-      h, w, c = img.shape
-  except:
-      h, w = img.shape
-  boxes = pytesseract.image_to_boxes(img)
-  for b in boxes.splitlines():
-      b = b.split(' ')
-      img = cv2.rectangle(img, (int(b[1]), h - int(b[2])), (int(b[3]), h - int(b[4])), (255, 255, 255), 2)
-
-  cv2.imwrite(outputFile, img)
-  cv2.waitKey(0)
+    pass
 
 def euclidean_distance(v):
 	(a,b)=v
@@ -116,28 +103,19 @@ def make_pairs(): #TODO: ADD TRANSFORMS AND CONTROLS, BUT FIRST I WANNA TEST
     if filename.endswith(".mp4"):
       classes.append(filename.split(".mp4")[0])
   numClasses = len(classes)
-  #print(classes)
-  # For each unique label, we compute idxs, which is a list of all indexes that belong to the current class labe
-  idx=[]
   idLabels=classes
-  counts=[1]
-  for i in range(0, numClasses):
-      count=0
-      for filename in os.listdir("test vids/"+classes[numClasses-1]):
-        if filename.endswith(".jpg"):
-          count+=1
-      #print(count)
-      idx.append(list(range(sum(counts)-1, sum(counts)+count-1)))
-      counts.append(count)
+  keys,values=[],[]
+  for eachclass in classes:
+    keys.append(eachclass)
+    sussyVariable=[]
+    for filename in os.listdir("test vids/"+eachclass):
+      if filename.endswith(".jpg"):
+        sussyVariable.append("test vids/"+eachclass+"/"+filename)
+      else:pass
+    values.append(sussyVariable)
 
-  images=[]
-  for filename1 in os.listdir("test vids"):
-    if filename1.endswith(".mp4"):
-      for filename in os.listdir("test vids/"+filename1.split(".")[0]):
-        if filename.endswith(".jpg"):
-          label = filename1.split(".mp4")[0]
-          images.append("test vids/"+label+"/"+filename)
-
+  foo = dict(zip(keys, values))
+  #dict foo = {"blue charge":["bluechrage1","bluecharrge2"]}
 
   for filename1 in os.listdir("test vids"):
     if filename1.endswith(".mp4"):
@@ -146,8 +124,8 @@ def make_pairs(): #TODO: ADD TRANSFORMS AND CONTROLS, BUT FIRST I WANNA TEST
           label = filename1.split(".mp4")[0]
           image = "test vids/"+label+"/"+filename
 
-          idxIndex = idLabels.index(label)
-          randomSame = images[np.random.choice(idx[idxIndex])]
+          #idx generates wrong?????????????? ?? ???? ??? ?? !! ke4?! nf0!! sussy 
+          randomSame = np.random.choice(foo[label])
 
           #print(np.asarray(Image.open(image)).shape)
 
@@ -158,15 +136,16 @@ def make_pairs(): #TODO: ADD TRANSFORMS AND CONTROLS, BUT FIRST I WANNA TEST
           while labelChosen == label:
             labelChosen = np.random.choice(classes) #lol a really bad way to do this
           label = labelChosen
-          idxIndex = idLabels.index(label)
-          randomDiff = images[np.random.choice(idx[idxIndex])]
+          randomDiff = np.random.choice(foo[label])
+
 
           pairImages.append([np.asarray(Image.open(image)), np.asarray(Image.open(randomDiff))])
           pairLabels.append([0])
 
-
   return (np.array(pairImages), np.array(pairLabels))
 
+
+import matplotlib
 def plot_training(H, plotPath): #'edit this'
 	plt.style.use("ggplot")
 	plt.figure()
@@ -182,23 +161,41 @@ def plot_training(H, plotPath): #'edit this'
 
 
 def plot_predict(model, test_data, BASE_OUTPUT):
-    predictions = model.predict(test_data)
-    fig2 = plt.figure(figsize=(10,10))
-    for b in range(100,164):
-        plt.subplot(8,8,(b-100)+1)
+  
+   
+    fig2 = plt.figure(figsize=(20,20))
+    for b in range(100,116):
+        np.random.shuffle(test_data)
+        row0 = test_data[:, 0]
+        row1 = test_data[:, 1]
+        plt.subplot(4,4,(b-100)+1)
         plt.xticks([])
         plt.yticks([])
         plt.grid(False)
-        im1 = Image.fromarray(np.uint8(cm.gist_earth(test_data[b][0])*255))
-        im2 = Image.fromarray(np.uint8(cm.gist_earth(test_data[b][1])*255))
+        #print(predictions)
+        im1 = Image.fromarray(np.uint8(matplotlib.cm.gist_earth(row0[b-100])*255))
+        im2 = Image.fromarray(np.uint8(matplotlib.cm.gist_earth(row1[b-100])*255))
         concat_im = Image.new('RGB', (im1.width + im2.width, im1.height))
         concat_im.paste(im1, (0, 0))
         concat_im.paste(im2, (im1.width, 0))
-
+        
+        imageA = row0[b-100]
+        imageB = row1[b-100]
+        imageA = np.expand_dims(imageA, axis=-1)
+        imageB = np.expand_dims(imageB, axis=-1)
+        imageA = np.expand_dims(imageA, axis=0)
+        imageB = np.expand_dims(imageB, axis=0)
+        imageA = imageA / 255.0
+        imageB = imageB / 255.0
+        try:
+          predictions = model.predict([imageA,imageB])
+          plt.xlabel(str(predictions))
+        except Exception as e:
+          print(e)
+        #outputfile = "output/" + str(predictions)
+        #cv2.imwrite(outputfile, concat_im)
         plt.imshow(concat_im, cmap=plt.cm.binary)
-        plt.xlabel(class_names[np.argmax(predictions[b])])
-
+        
         fig2.savefig('output/prediction.png')
         
-genFrames()
-#train()
+#genFrames()

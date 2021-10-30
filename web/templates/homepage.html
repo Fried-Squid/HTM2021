@@ -1,11 +1,93 @@
 <html>
   <head>
     <style>
-       body {
-            background-image: url('https://i.imgur.com/9m7hilt.jpg')
-            }
-    </style>
+      body {
+        background-image: url('https://i.imgur.com/9m7hilt.jpg');
+        height: fill;
+        font-family: "Comic Sans MS"
+        }
+      #gallery {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 12px;
+        margin: 12px 1.75vh;
+        height: 96.5vh;
+        font-size: 150%;
+        font-family: "Comic Sans MS"
+        }
+      button {
+        width: fill;
+        background-color: transparent;
+        background-size: 90% 80%;
+        background-repeat: no-repeat;
+        color: white;
+        font-size: 0.9em;
+        cursor: pointer;
+        border: none;
+        font-family: "Comic Sans MS"
+      }
+      section {
+        width: fill;
+        height: fill;
+      }
+      .primary {
+        position: relative;
+        top: 35%;
+
+      }
+      #rightbutton {
+        background-image: url('https://imgur.com/MWDqMbL.jpg');
+      }
+      #leftbutton {
+        background-image: url('https://imgur.com/CIWKuV1.jpg');
+      }
+      #middlebutton {
+        background-color: green;
+        border-style: outset;
+        border-color: #005500;
+        border-size: 5px;
+      }
+      h1 {
+        color: white;
+      }
+</style>
+
   </head>
   <body>
+    <h1 align="center">
+      welcome, {{ username }}
+    </h>
+    <section id="gallery">
+      <button id="leftButton">
+        <div class="primary">
+          Upload a Photo of a Can 
+        </div>
+      </button>
+      <button id="rightButton">
+        <div class="primary">
+          View your Collection of Recycled Cans
+        </div>
+      </button>
+    </section>
+    <button id="middleButton">
+      <div class="secondary">
+        make your day green
+      </div>
+    </button>
+    <script>
+      var btn = document.getElementById("leftButton");
+      var btn2 = document.getElementById("rightButton");
+      var btn3 = document.getElementById("middleButton");
+      btn.onclick = function() {
+        window.location.href = "/upload";
+        }
+      btn2.onclick = function() {
+        window.location.href = "/collection";
+        }   
+      btn3.onclick = function() {
+        window.location.href = "/greenday"
+      }
+    </script>
   </body>
+
 </html>
